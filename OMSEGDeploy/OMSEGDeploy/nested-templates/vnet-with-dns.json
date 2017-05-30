@@ -1,0 +1,56 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+    "VNETNAME": "ContosoAzureVNET",
+    "DNSIP": "10.6.0.4",
+    "VNETPrefix": "10.6.0.0/16",
+    "VNETSubnet1Name": "ContosoAzureSubnet",
+    "VNETSubnet1Prefix": "10.6.0.0/24",
+    "VNETSubnet2Name": "GatewaySubnet",
+    "VNETSubnet2Prefix": "10.6.1.0/29"
+  },
+
+  "resources": [
+    {
+      "name": "[variables('VNETNAME')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "ContosoAzureVNET"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('VNETPrefix')]"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": [
+            "[variables('DNSIP')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('VNETSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNETSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('VNETSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNETSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {}
+
+}
