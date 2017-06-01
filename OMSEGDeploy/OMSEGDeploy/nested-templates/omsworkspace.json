@@ -4,9 +4,22 @@
   "parameters": {
     "workspaceName": {
       "type": "string",
-      "defaultValue": "ContosoRetail",
       "metadata": {
         "description": "workspaceName"
+      }
+    },
+    "automationAccountName": {
+      "type": "string",
+      "defaultValue": "ContosoRetailAutomation",
+      "metadata": {
+        "description": "Automation Account Name"
+      }
+    },
+    "automationAccountLocation": {
+      "type": "string",
+      "defaultValue": "EastUS2",
+      "metadata": {
+        "description": "Automation Account Location"
       }
     },
     "serviceTier": {
@@ -40,20 +53,24 @@
         "Australia Southeast"
       ]
     },
-    "applicationDiagnosticsStorageAccountName": {
+    "diagnosticsType": {
       "type": "string",
-      "metadata": {
-        "description": "Name of the storage account with Azure diagnostics output"
-      }
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS"
+      ]
     },
-    "applicationDiagnosticsStorageAccountResourceGroup": {
+    "adminUserName": {
       "type": "string",
-      "metadata": {
-        "description": "The resource group name containing the storage account with Azure diagnostics output"
-      }
+      "defaultValue": "demouser"
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "defaultValue": "Demo@pass123"
     }
   },
   "variables": {
+    "AzureAutomationCredentials": "contosocreds",
     "Updates": {
       "Name": "[Concat('Updates', '(', parameters('workspaceName'), ')')]",
       "GalleryName": "Updates"
@@ -66,9 +83,95 @@
       "Name": "[Concat('SQLAssessment', '(', parameters('workspaceName'), ')')]",
       "GalleryName": "SQLAssessment"
     },
-    "diagnosticsStorageAccount": "[resourceId(parameters('applicationDiagnosticsStorageAccountResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('applicationDiagnosticsStorageAccountName'))]"
+    "ADAssessment": {
+      "Name": "[Concat('ADAssessment', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "ADAssessment"
+    },
+    "ADReplication": {
+      "Name": "[Concat('ADReplication', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "ADReplication"
+    },
+    "AgentHealthAssessment": {
+      "Name": "[Concat('AgentHealthAssessment', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "AgentHealthAssessment"
+    },
+    "AzureActivity": {
+      "Name": "[Concat('AzureActivity', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "AzureActivity"
+    },
+    "AzureAutomation": {
+      "Name": "[Concat('AzureAutomation', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "AzureAutomation"
+    },
+    "AzureNSGAnalytics": {
+      "Name": "[Concat('AzureNSGAnalytics', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "AzureNSGAnalytics"
+    },
+    "ChangeTracking": {
+      "Name": "[Concat('ChangeTracking', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "ChangeTracking"
+    },
+    "NetworkMonitoring": {
+      "Name": "[Concat('NetworkMonitoring', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "NetworkMonitoring"
+    },
+    "Security": {
+      "Name": "[Concat('Security', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "Security"
+    },
+    "ServiceMap": {
+      "Name": "[Concat('ServiceMap', '(', parameters('workspaceName'), ')')]",
+      "GalleryName": "ServiceMap"
+    },
+    "diagnosticsName": "[concat('diagnostics', uniqueString(resourceGroup().id))]",
+    "diagnosticsStorageAccount": "[resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsName'))]"
   },
   "resources": [
+    {
+      "apiVersion": "2015-10-31",
+      "location": "[parameters('automationAccountLocation')]",
+      "name": "[parameters('automationAccountName')]",
+      "type": "Microsoft.Automation/automationAccounts",
+      "properties": {
+        "sku": {
+          "name": "Basic"
+        }
+      }
+    },
+    {
+      "name": "[variables('AzureAutomationCredentials')]",
+      "type": "credentials",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "userName": "[parameters('adminUserName')]",
+        "password": "[parameters('adminPassword')]"
+      }
+    },
+    {
+      "name": "[variables('runbookName')]",
+      "type": "runbooks",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "runbookType": "Script",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "[variables('runbookDescription')]",
+        "publishContentLink": {
+          "uri": "[variables('scriptUri')]",
+          "version": "1.0.0.0"
+        }
+      }
+    },
     {
       "apiVersion": "2015-11-01-preview",
       "type": "Microsoft.OperationalInsights/workspaces",
@@ -287,10 +390,11 @@
         },
         {
           "apiVersion": "2015-11-01-preview",
-          "name": "[concat(parameters('applicationDiagnosticsStorageAccountName'),parameters('workspaceName'))]",
+          "name": "[concat(variables('diagnosticsName'),parameters('workspaceName'))]",
           "type": "storageinsightconfigs",
           "dependsOn": [
-            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]",
+            "[concat('Microsoft.Storage/storageAccounts/', variables('diagnosticsName'))]"
           ],
           "properties": {
             "containers": [
@@ -316,6 +420,7 @@
           ],
           "properties": {
             "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+
           },
           "plan": {
             "name": "[variables('Updates').Name]",
@@ -361,8 +466,212 @@
             "product": "[Concat('OMSGallery/', variables('SQLAssessment').GalleryName)]",
             "promotionCode": ""
           }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('ADAssessment').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('ADAssessment').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('ADAssessment').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('ADAssessment').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('ADReplication').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('ADReplication').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('ADReplication').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('ADReplication').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('AgentHealthAssessment').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('AgentHealthAssessment').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('AgentHealthAssessment').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('AgentHealthAssessment').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('AzureActivity').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('AzureActivity').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('AzureActivity').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('AzureActivity').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('AzureAutomation').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('AzureAutomation').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('AzureAutomation').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('AzureAutomation').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('AzureNSGAnalytics').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('AzureNSGAnalytics').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('AzureNSGAnalytics').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('AzureNSGAnalytics').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('ChangeTracking').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('ChangeTracking').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('ChangeTracking').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('ChangeTracking').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('NetworkMonitoring').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('NetworkMonitoring').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('NetworkMonitoring').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('NetworkMonitoring').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('Security').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('Security').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('Security').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('Security').GalleryName)]",
+            "promotionCode": ""
+          }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "location": "[parameters('location')]",
+          "name": "[variables('ServiceMap').Name]",
+          "type": "Microsoft.OperationsManagement/solutions",
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('ServiceMap').Name)]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "properties": {
+            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          },
+          "plan": {
+            "name": "[variables('ServiceMap').Name]",
+            "publisher": "Microsoft",
+            "product": "[Concat('OMSGallery/', variables('ServiceMap').GalleryName)]",
+            "promotionCode": ""
+          }
         }
       ]
+    },
+    {
+      "name": "[variables('diagnosticsName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-01-01",
+      "sku": {
+        "name": "[parameters('diagnosticsType')]"
+      },
+      "dependsOn": [],
+      "tags": {
+        "displayName": "diagnostics"
+      },
+      "kind": "Storage"
     }
   ],
   "outputs": {

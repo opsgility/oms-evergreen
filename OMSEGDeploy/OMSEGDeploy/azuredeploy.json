@@ -11,7 +11,19 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/opsgility/lab-support-public/master/implementing-azure-backup/vnet.json",
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/omsworkspace.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "VNet",
+      "apiVersion": "2016-02-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/vnet.json",
           "contentVersion": "1.0.0.0"
         }
       }
@@ -26,7 +38,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/opsgility/lab-support-public/master/implementing-azure-backup/vnet-with-dns.json",
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/vnet-with-dns.json",
           "contentVersion": "1.0.0.0"
         }
       }
