@@ -139,24 +139,23 @@
       }
     },
     {
-      "name": "[variables('AzureAutomationCredentials')]",
-      "type": "credentials",
-      "apiVersion": "2015-01-01-preview",
-      "location": "[resourceGroup().location]",
+      "name": "[concat(parameters('automationAccountName'),'/',variables('AzureAutomationCredentials'))]",
+      "type": "Microsoft.Automation/automationAccounts/credentials",
+      "apiVersion": "2015-10-31",
       "dependsOn": [
         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
       ],
-      "tags": {},
       "properties": {
         "userName": "[parameters('adminUserName')]",
-        "password": "[parameters('adminPassword')]"
+        "password": "[parameters('adminPassword')]",
+        "description": "string"
       }
     },
     {
-      "name": "[variables('runbookName')]",
-      "type": "runbooks",
+      "name": "[concat(parameters('automationAccountName'),'/','scaleUpV2VM1')]",
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
       "apiVersion": "2015-01-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('automationAccountLocation')]",
       "dependsOn": [
         "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
       ],
@@ -165,9 +164,89 @@
         "runbookType": "Script",
         "logProgress": "false",
         "logVerbose": "false",
-        "description": "[variables('runbookDescription')]",
+        "description": "scaleUpV2VM1",
         "publishContentLink": {
-          "uri": "[variables('scriptUri')]",
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/runbooks/scaleUpV2Vm.ps1",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "[concat(parameters('automationAccountName'),'/','scaleDownV2VM')]",
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[parameters('automationAccountLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "runbookType": "Script",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "scaleDownV2Vm",
+        "publishContentLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/runbooks/scaleDownV2Vm.ps1",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "[concat(parameters('automationAccountName'),'/','restoreStoreSrv001')]",
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[parameters('automationAccountLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "runbookType": "Script",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "resetStoreSrv001",
+        "publishContentLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/runbooks/resetStoreSrv001.ps1",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "[concat(parameters('automationAccountName'),'/','restoreStoreSrv002')]",
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[parameters('automationAccountLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "runbookType": "Script",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "resetStoreSrv002",
+        "publishContentLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/runbooks/resetStoreSrv002.ps1",
+          "version": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "[concat(parameters('automationAccountName'),'/','AzureVHD')]",
+      "type": "Microsoft.Automation/automationAccounts/runbooks",
+      "apiVersion": "2015-01-01-preview",
+      "location": "[parameters('automationAccountLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Automation/automationAccounts/', parameters('automationAccountName'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "runbookType": "Script",
+        "logProgress": "false",
+        "logVerbose": "false",
+        "description": "AzureVHD",
+        "publishContentLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/runbooks/AzureVHD.ps1",
           "version": "1.0.0.0"
         }
       }

@@ -6,7 +6,7 @@
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "VNet",
+      "name": "DeployOMS",
       "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
@@ -30,10 +30,25 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
+      "name": "DeployActiveDirectory",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VNET"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/vnet-with-dns.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
       "name": "VNetWithDNS",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('ADVMName'), 'InstallAD')]"
+        "Microsoft.Resources/deployments/DeployActiveDirectory"
       ],
       "properties": {
         "mode": "Incremental",
@@ -43,6 +58,7 @@
         }
       }
     }
+
   ],
   "outputs": {}
 }
