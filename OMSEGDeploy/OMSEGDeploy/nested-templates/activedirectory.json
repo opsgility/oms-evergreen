@@ -113,7 +113,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('adipName'))]"
               },
               "privateIp": {
-                "value": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('ADVMNicName'))).ipConfigurations[0].properties.privateIPAddress]"
+                "value": "10.6.0.4"
               }
             }
           }
