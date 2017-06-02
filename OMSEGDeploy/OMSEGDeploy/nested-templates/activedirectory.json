@@ -64,7 +64,7 @@
     "ADVMOSDiskName": "ADVMOSDisk",
     "ADVMVmSize": "Standard_DS1_v2",
     "ADVMVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
-    "ADVMSubnetRef": "[concat(variables('ADVMVnetID'), '/subnets/', 'ContosoAzureSubnet'))]",
+    "ADVMSubnetRef": "[concat(variables('ADVMVnetID'), '/subnets/ContosoAzureSubnet')]",
     "ADVMStorageAccountContainerName": "vhds",
     "ADVMNicName": "[concat(parameters('ADVMName'), 'NetworkInterface')]",
     "InstallADScriptFolder": "CustomScripts",
@@ -95,7 +95,6 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-03-30",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VNet",
         "[resourceId('Microsoft.Network/publicIPAddresses', variables('adipName'))]"
       ],
       "tags": {
