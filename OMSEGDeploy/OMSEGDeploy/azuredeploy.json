@@ -1,7 +1,14 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {},
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "OMS workspaceName"
+      }
+    }
+  },
   "variables": {},
   "resources": [
     {
@@ -16,10 +23,7 @@
         },
         "parameters": {
           "workspaceName": {
-            "type": "string",
-            "metadata": {
-              "description": "workspaceName"
-            }
+            "value": "[parameters('workspaceName')]"
           }
         }
       }
@@ -46,7 +50,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/vnet-with-dns.json",
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/activedirectory.json",
           "contentVersion": "1.0.0.0"
         }
       }
