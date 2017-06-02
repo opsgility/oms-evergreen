@@ -126,9 +126,7 @@
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('adipName'))]"
               },
-              "privateIp": {
-                "value": "10.6.0.4"
-              }
+              "privateIPAddress" : "10.6.0.4"
             }
           }
         ]
