@@ -5,6 +5,16 @@ VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoAzureHQ", "OMSEGDeploy\ContosoAzureHQ.deployproj", "{4C3E484D-EA1A-4071-B49A-0007E99A4C85}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoOnPremHQ", "ContosoOnPremHQ\ContosoOnPremHQ.deployproj", "{033C4CE4-E18D-4159-B9B7-FA94279AA40A}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoAzureHQ-DR", "ContosoAzureHQ-DR\ContosoAzureHQ-DR.deployproj", "{BCFBC340-0E24-47E8-8E55-A3B69CE284ED}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoRetailStore001", "ContosoRetailStore001\ContosoRetailStore001.deployproj", "{C7090CFE-B030-4E56-ACEF-A26E334502AB}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoRetailStore002", "ContosoRetailStore002\ContosoRetailStore002.deployproj", "{5367BCF3-5A29-47A2-AFB0-ADB2BCADC326}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ContosoInfraManagement", "ContosoInfraManagement\ContosoInfraManagement.deployproj", "{E0EAA45A-B29A-45DB-8A2D-1626ED6D7D3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{4C3E484D-EA1A-4071-B49A-0007E99A4C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C3E484D-EA1A-4071-B49A-0007E99A4C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C3E484D-EA1A-4071-B49A-0007E99A4C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{033C4CE4-E18D-4159-B9B7-FA94279AA40A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033C4CE4-E18D-4159-B9B7-FA94279AA40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033C4CE4-E18D-4159-B9B7-FA94279AA40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033C4CE4-E18D-4159-B9B7-FA94279AA40A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCFBC340-0E24-47E8-8E55-A3B69CE284ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCFBC340-0E24-47E8-8E55-A3B69CE284ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCFBC340-0E24-47E8-8E55-A3B69CE284ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCFBC340-0E24-47E8-8E55-A3B69CE284ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7090CFE-B030-4E56-ACEF-A26E334502AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7090CFE-B030-4E56-ACEF-A26E334502AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7090CFE-B030-4E56-ACEF-A26E334502AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7090CFE-B030-4E56-ACEF-A26E334502AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5367BCF3-5A29-47A2-AFB0-ADB2BCADC326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5367BCF3-5A29-47A2-AFB0-ADB2BCADC326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5367BCF3-5A29-47A2-AFB0-ADB2BCADC326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5367BCF3-5A29-47A2-AFB0-ADB2BCADC326}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0EAA45A-B29A-45DB-8A2D-1626ED6D7D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0EAA45A-B29A-45DB-8A2D-1626ED6D7D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0EAA45A-B29A-45DB-8A2D-1626ED6D7D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0EAA45A-B29A-45DB-8A2D-1626ED6D7D3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

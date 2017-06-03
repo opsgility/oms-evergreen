@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>4c3e484d-ea1a-4071-b49a-0007e99a4c85</ProjectGuid>
+    <ProjectGuid>033c4ce4-e18d-4159-b9b7-fa94279aa40a</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworkIdentifier>Deployment</TargetFrameworkIdentifier>
@@ -31,16 +31,6 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
-    <None Include="nested-templates\activedirectory.json" />
-    <None Include="nested-templates\omsworkspace.json" />
-    <None Include="nested-templates\vnet-with-dns.json" />
-    <None Include="nested-templates\vnet.json" />
-    <None Include="nested-templates\webapp.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>
