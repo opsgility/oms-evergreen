@@ -89,8 +89,12 @@
     }
   },
   "variables": {
+    "webStorageName": "[concat('web', uniqueString(resourceGroup().id))]",
+    "webStorageAccount": "[resourceId('Microsoft.Storage/storageAccounts', variables('webStorageName'))]",
+    "webStorageAccountType": "Standard_LRS",
+    "webStorageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('webStorageName'))]",
     "sqlServerName": "[concat('consqlhq', uniqueString(subscription().id, resourceGroup().id))]",
-    "databaseName": "sample-db-with-tde",
+    "databaseName": "ContosoRetailWebAppDb",
     "databaseEdition": "Standard",
     "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
     "databaseServiceObjectiveName": "S0"
@@ -98,65 +102,18 @@
 
   "resources": [
     {
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('hostingPlanName')]",
-      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('webStorageName')]",
+      "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "ContosoRetailWebAppDB"
-      },
+      "apiVersion": "2016-01-01",
       "sku": {
-        "name": "[parameters('sku')]",
-        "capacity": "[parameters('workerSize')]"
+        "name": "[variables('webStorageAccountType')]"
       },
-      "properties": {
-        "name": "[parameters('hostingPlanName')]"
-      }
-    },
-    {
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('siteName')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
+      "dependsOn": [],
       "tags": {
-        "displayName": "ContosoRetailWebApp"
+        "displayName": "ContosoWebStorage"
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
-        "[resourceId('Microsoft.SQL/sqlservers', variables('sqlServerName'))]"
-      ],
-      "properties": {
-        "serverFarmId": "[parameters('hostingPlanName')]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2016-03-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[parameters('siteName')]"
-          ],
-          "properties": {
-            "DefaultConnection": {
-              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databaseName'), ';User Id=', parameters('adminUsername'), '@', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ';Password=', parameters('adminPassword'), ';')]",
-              "type": "SQLAzure"
-            }
-          }
-        },
-        {
-          "apiVersion": "2015-08-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('repoURL')]",
-            "branch": "[parameters('branch')]",
-            "IsManualIntegration": true
-          }
-        }
-      ]
+      "kind": "Storage"
     },
     {
       "name": "[variables('sqlServerName')]",
@@ -217,7 +174,77 @@
           ]
         }
       ]
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "ContosoRetailWebAppPlan"
+      },
+      "sku": {
+        "name": "[parameters('sku')]",
+        "capacity": "[parameters('workerSize')]"
+      },
+      "properties": {
+        "name": "[parameters('hostingPlanName')]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('siteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "ContosoRetailWebApp"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+        "[variables('sqlServerName')]"
+      ],
+      "properties": {
+        "serverFarmId": "[parameters('hostingPlanName')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2016-03-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[parameters('siteName')]"
+          ],
+          "properties": {
+            "Contoso-Express": {
+              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databaseName'), ';User Id=', parameters('adminUsername'), '@', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ';Password=', parameters('adminPassword'), ';')]",
+              "type": "SQLAzure"
+            },
+            "Contoso-DataWarehouse": {
+              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databaseName'), ';User Id=', parameters('adminUsername'), '@', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ';Password=', parameters('adminPassword'), ';')]",
+              "type": "SQLAzure"
+            },
+            "ContosoStorage": {
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('webStorageName'),';AccountKey=',concat(listKeys(variables('webStorageAccountId'),'2015-05-01-preview').key1))]",
+              "type": "Custom"
+            }
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('repoURL')]",
+            "branch": "[parameters('branch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
     }
+
   ],
   "outputs": {}
 

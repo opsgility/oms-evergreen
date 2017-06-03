@@ -11,7 +11,7 @@
     },
     "contosoRetailSiteName": {
       "type": "string",
-      "defaultValue": "testsitename123",
+      "defaultValue": "[concat('contoso', uniqueString(resourceGroup().id))]",
       "metadata": {
         "description": "Unique site name for contoso retail"
       }
