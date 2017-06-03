@@ -4,12 +4,14 @@
   "parameters": {
     "workspaceName": {
       "type": "string",
+      "defaultValue": "[concat('oms', uniqueString(resourceGroup().id))]",
       "metadata": {
         "description": "Unique OMS workspaceName"
       }
     },
     "contosoRetailSiteName": {
       "type": "string",
+      "defaultValue": "[concat('ctretail', uniqueString(resourceGroup().id))]",
       "metadata": {
         "description": "Unique site name for contoso retail"
       }
