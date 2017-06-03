@@ -65,8 +65,8 @@
     }
   },
   "variables": {
-    "vmstorageName": "[concat('contosohqdisks', uniqueString(resourceGroup().id))]",
-    "diagstorageName": "[concat('contosohqdiag', uniqueString(resourceGroup().id))]",
+    "vmstorageName": "[concat('chqdisks', uniqueString(resourceGroup().id))]",
+    "diagstorageName": "[concat('chqdiag', uniqueString(resourceGroup().id))]",
     "diagstorageId": "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName'))]",
     "ADVMImagePublisher": "MicrosoftWindowsServer",
     "ADVMImageOffer": "WindowsServer",
@@ -177,6 +177,7 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('vmstorageName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName'))]",
         "[resourceId('Microsoft.Network/networkInterfaces', variables('ADVMNicName'))]",
         "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
       ],
