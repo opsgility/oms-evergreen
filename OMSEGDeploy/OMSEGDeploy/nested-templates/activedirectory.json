@@ -67,7 +67,7 @@
   "variables": {
     "vmstorageName": "[concat('contosohqdisks', uniqueString(resourceGroup().id))]",
     "diagstorageName": "[concat('contosohqdiag', uniqueString(resourceGroup().id))]",
-    "diagstorageId": "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName')]",
+    "diagstorageId": "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName'))]",
     "ADVMImagePublisher": "MicrosoftWindowsServer",
     "ADVMImageOffer": "WindowsServer",
     "ADVMOSDiskName": "ADVMOSDisk",
