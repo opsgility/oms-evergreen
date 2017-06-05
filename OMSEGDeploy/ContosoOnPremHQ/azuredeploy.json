@@ -2,7 +2,44 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {},
-  "variables": {},
-  "resources": [],
+  "variables": {
+    "ContosoOnPremVNETPrefix": "10.5.0.0/16",
+    "ContosoOnPremVNETSubnet1Name": "ContosoAzureSubnet",
+    "ContosoOnPremVNETSubnet1Prefix": "10.5.0.0/24",
+    "ContosoOnPremVNETSubnet2Name": "GatewaySubnet",
+    "ContosoOnPremVNETSubnet2Prefix": "10.5.1.0/29"
+  },
+  "resources": [
+    {
+      "name": "ContosoOnPremVNET",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "ContosoOnPremVNET"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('ContosoOnPremVNETPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('ContosoOnPremVNETSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('ContosoOnPremVNETSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('ContosoOnPremVNETSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('ContosoOnPremVNETSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    }],
   "outputs": {}
 }

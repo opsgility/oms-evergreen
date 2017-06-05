@@ -10,23 +10,24 @@
     }
   },
   "variables": {
-    "VNETNAME": "ContosoAzureVNET",
+    "VNETNAME": "ContosoOnPremVNET",
     "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNETNAME'))]",
     "GatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/','GatewaySubnet')]",
-    "GatewayPublicIPName": "ContosoAzureVNETGWIP",
-    "LocalGatewayName": "ContosoAzure2OnPremGW",
-    "VPNGatewayName": "ContosoAzure2OnPremGW",
-    "LocalAddressPrefix": "10.5.0.0/16",
+    "GatewayPublicIPName": "ContosoOnPremVNETGWIP",
+    "LocalGatewayName": "ContosoOnPrem2AzureGW",
+    "VPNGatewayName": "ContosoOnPrem2AzureGW",
+    "LocalAddressPrefix": "10.6.0.0/16",
     "ConnectionName": "ContosoS2S",
     "GatewaySKU": "Basic",
     "VPNType": "RouteBased",
-    "DNSIP": "10.0.1.4",
-    "VNETPrefix": "10.6.0.0/16",
+    "DNSIP": "10.6.1.4",
+    "VNETPrefix": "10.5.0.0/16",
     "VNETSubnet1Name": "ContosoAzureSubnet",
-    "VNETSubnet1Prefix": "10.6.0.0/24",
+    "VNETSubnet1Prefix": "10.5.0.0/24",
     "VNETSubnet2Name": "GatewaySubnet",
-    "VNETSubnet2Prefix": "10.6.1.0/29"
+    "VNETSubnet2Prefix": "10.5.1.0/29"
   },
+
   "resources": [
     {
       "name": "[variables('VNETNAME')]",
@@ -35,12 +36,17 @@
       "apiVersion": "2016-03-30",
       "dependsOn": [],
       "tags": {
-        "displayName": "ContosoAzureVNET"
+        "displayName": "ContosoOnPremVNET"
       },
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
             "[variables('VNETPrefix')]"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": [
+            "[variables('DNSIP')]"
           ]
         },
         "subnets": [
@@ -147,7 +153,8 @@
         "publicIPAllocationMethod": "Dynamic"
       }
     }
+
   ],
   "outputs": {}
 
-  }
+}
