@@ -29,6 +29,12 @@
       "metadata": {
         "description": "The password for the administrator account of the new VM and domain"
       }
+    },
+    "vpnSharedKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The SharedKey for the VPN tunnels"
+      }
     }
   },
   "variables": {},
@@ -59,6 +65,11 @@
         "templateLink": {
           "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/vnet.json",
           "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "SharedKey": {
+            "value": "[parameters('vpnSharedKey')]"
+          }
         }
       }
     },
