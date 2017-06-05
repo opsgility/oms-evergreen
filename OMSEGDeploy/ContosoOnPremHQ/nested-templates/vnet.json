@@ -78,7 +78,8 @@
           "addressPrefixes": [
             "[variables('localAddressPrefix')]"
           ]
-        }
+        },
+        "gatewayIpAddress": "0.0.0.0"
       }
     },
     {
