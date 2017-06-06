@@ -149,7 +149,7 @@
     "MABSServerVM1ImageOffer": "WindowsServer",
     "MABSServerVM1OSDiskName": "MABSServerVM1OSDisk",
     "MABSServerVM1VmSize": "Standard_DS2_v2",
-    "MABSServerVM1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'OPSTrainingVNET')]",
+    "MABSServerVM1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('ContosoOnPremVNETName'))]",
     "MABSServerVM1SubnetRef": "[concat(variables('MABSServerVM1VnetID'), '/subnets/', variables('ContosoOnPremVNETSubnet1Name'))]",
     "MABSServerVM1StorageAccountContainerName": "vhds",
     "MABSServerVM1NicName": "[concat(parameters('MABSServerVM1Name'), 'NetworkInterface')]",
