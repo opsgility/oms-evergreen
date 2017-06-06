@@ -47,14 +47,14 @@
       "metadata": {
         "description": "script to execute"
       },
-      "defaultValue": "https://raw.githubusercontent.com/opsgility/lab-support-public/master/script-extensions/deploy-ad.ps1"
+      "defaultValue": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/script-extensions/deploy-ad.ps1"
     },
     "DomainJoinscriptUrl": {
       "type": "string",
       "metadata": {
         "description": "script to execute"
       },
-      "defaultValue": "https://raw.githubusercontent.com/opsgility/lab-support-public/master/script-extensions/domain-join.ps1"
+      "defaultValue": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/script-extensions/domain-join.ps1"
     },
     "ADVMWindowsOSVersion": {
       "type": "string",
