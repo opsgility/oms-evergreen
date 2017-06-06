@@ -115,6 +115,9 @@
     "WindowsOSVersion": "2016-Datacenter",
     "WindowsImagePublisher": "MicrosoftWindowsServer",
     "WindowsImageOffer": "WindowsServer",
+    "SQLSKU": "Standard",
+    "SQLImagePublisher": "MicrosoftSQLServer",
+    "SQLImageOffer": "SQL2014SP2-WS2012R2",
     "ADVMOSDiskName": "ADVMOSDisk",
     "ADVMVmSize": "Standard_DS1_v2",
     "ADVMVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
@@ -152,9 +155,9 @@
     "DomainJoinscriptFileName": "domain-join.ps1",
     "DomainJoinscriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'))]",
     "CloudShopInstallScriptFileName": "deploy-cloudshop.ps1",
-    "CloudShopInstallScriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'))]",
+    "CloudShopInstallScriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'), ' -cloudshopurl ', parameters('CloudShopDownloadUrl'))]",
     "CloudShopDBInstallScriptFileName": "deploy-cloudshop-db.ps1",
-    "CloudShopDBInstallScriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'))]",
+    "CloudShopDBInstallScriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'), ' -dbsource ', parameters('CloudShopDBDownloadUrl') )]",
     "adipName": "adip",
     "webipName": "webip",
     "linuxipName": "linuxip",
@@ -671,7 +674,7 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[variables('WindowsImagePublisher')]",
+            "publisher": "[variables('SQLImagePublisher')]",
             "offer": "[variables('WindowsImageOffer')]",
             "sku": "[variables('WindowsOSVersion')]",
             "version": "latest"
@@ -695,7 +698,7 @@
       },
       "resources": [
         {
-          "name": "InstallCloudShop",
+          "name": "InstallCloudShopDB",
           "type": "extensions",
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-03-30",
