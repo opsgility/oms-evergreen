@@ -484,7 +484,7 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Static",
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('WebSubnetRef')]"
               },
@@ -636,7 +636,8 @@
               },
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('sqlipName'))]"
-              }
+              },
+              "privateIPAddress": "10.6.0.100"
             }
           }
         ]
