@@ -553,6 +553,7 @@
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-03-30",
           "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('WebVMName'))]"
           ],
           "tags": {
             "displayName": "InstallCloudShop"
@@ -698,6 +699,7 @@
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-03-30",
           "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('SQLVMName'))]"
           ],
           "tags": {
             "displayName": "InstallCloudShopDB"
