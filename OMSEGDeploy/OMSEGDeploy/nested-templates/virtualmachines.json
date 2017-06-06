@@ -21,6 +21,11 @@
       "defaultValue": "ContosoAzADDS1",
       "minLength": 1
     },
+    "WebVMName": {
+      "type": "string",
+      "defaultValue": "ContosoWeb1",
+      "minLength": 1
+    },
     "adminUsername": {
       "type": "string",
       "defaultValue": "demouser",
@@ -56,11 +61,24 @@
       },
       "defaultValue": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/script-extensions/domain-join.ps1"
     },
-    "ADVMWindowsOSVersion": {
+    "CloudShopInstallscriptUrl": {
       "type": "string",
-      "defaultValue": "2016-Datacenter",
+      "metadata": {
+        "description": "script to execute"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/script-extensions/deploy-cloudshop.ps1"
+    },
+    "ContosoAzLnx1Name": {
+      "type": "string",
+      "defaultValue": "ContosoAzLnx1",
+      "minLength": 1
+    },
+    "ContosoAzLnx1UbuntuOSVersion": {
+      "type": "string",
+      "defaultValue": "14.04.2-LTS",
       "allowedValues": [
-        "2016-Datacenter"
+        "12.04.5-LTS",
+        "14.04.2-LTS"
       ]
     }
   },
@@ -68,22 +86,45 @@
     "vmstorageName": "[concat('chqdisks', uniqueString(resourceGroup().id))]",
     "diagstorageName": "[concat('chqdiag', uniqueString(resourceGroup().id))]",
     "diagstorageId": "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName'))]",
-    "ADVMImagePublisher": "MicrosoftWindowsServer",
-    "ADVMImageOffer": "WindowsServer",
+    "WindowsOSVersion": "2016-Datacenter",
+    "WindowsImagePublisher": "MicrosoftWindowsServer",
+    "WindowsImageOffer": "WindowsServer",
     "ADVMOSDiskName": "ADVMOSDisk",
     "ADVMVmSize": "Standard_DS1_v2",
     "ADVMVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
     "ADVMSubnetRef": "[concat(variables('ADVMVnetID'), '/subnets/ContosoAzureSubnet')]",
     "ADVMStorageAccountContainerName": "vhds",
     "ADVMNicName": "[concat(parameters('ADVMName'), 'NetworkInterface')]",
+    "WebAvailabilitySetName": "WebAVSet",
+    "WebOSDiskName": "WebOSDisk",
+    "WebVmSize": "Standard_DS1_v2",
+    "WebVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
+    "WebSubnetRef": "[concat(variables('WebVnetID'), '/subnets/ContosoAzureSubnet')]",
+    "WebStorageAccountContainerName": "vhds",
+    "WebNicName": "[concat(parameters('WebVMName'), 'NetworkInterface')]",
+
+    "ContosoAzLnx1ImagePublisher": "Canonical",
+    "ContosoAzLnxAvailabilitySetName": "ContosoAzLnxAVSet",
+    "ContosoAzLnx1ImageOffer": "UbuntuServer",
+    "ContosoAzLnx1OSDiskName": "ContosoAzLnx1OSDisk",
+    "ContosoAzLnx1VmSize": "Standard_DS2_v2",
+    "ContosoAzLnx1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', '/subnets/ContosoAzureSubnet')]",
+    "ContosoAzLnx1SubnetRef": "[concat(variables('ContosoAzLnx1VnetID'), '/subnets/', 'ContosoAzureSubnet')]",
+    "ContosoAzLnx1StorageAccountContainerName": "vhds",
+    "ContosoAzLnx1NicName": "[concat(parameters('ContosoAzLnx1Name'), 'NetworkInterface')]",
     "InstallADScriptFolder": "CustomScripts",
     "InstallADScriptFileName": "InstallAD.ps1",
     "scriptFolder": ".",
-    "VM1scriptFileName": "deploy-ad.ps1",
-    "VM1scriptParameters": "[concat(' -domain ', parameters('domainName'), ' -password ', parameters('adminPassword'))]",
+    "ADInstallScriptFileName": "deploy-ad.ps1",
+    "ADInstallScriptFileNameParameters": "[concat(' -domain ', parameters('domainName'), ' -password ', parameters('adminPassword'))]",
     "DomainJoinscriptFileName": "domain-join.ps1",
     "DomainJoinscriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'))]",
+    "CloudShopInstallScriptFileName": "deploy-cloudshop.ps1",
+    "CloudShopInstallScriptParameters": "[concat(' -domain ', parameters('domainName'), ' -user ', parameters('adminUsername'), ' -password ', parameters('adminPassword'))]",
     "adipName": "adip",
+    "webipName": "webip",
+    "linuxipName": "linuxip",
+    "mabipName": "mabip",
     "availabilitySetName": "ContosoAzADDSAVSet",
     "wadlogs": "<WadCfg> <DiagnosticMonitorConfiguration overallQuotaInMB=\"4096\" xmlns=\"http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration\"> <DiagnosticInfrastructureLogs scheduledTransferLogLevelFilter=\"Error\"/> <WindowsEventLog scheduledTransferPeriod=\"PT1M\" > <DataSource name=\"Application!*[System[(Level = 1 or Level = 2)]]\" /> <DataSource name=\"Security!*[System[(Level = 1 or Level = 2)]]\" /> <DataSource name=\"System!*[System[(Level = 1 or Level = 2)]]\" /></WindowsEventLog>",
     "wadperfcounters1": "<PerformanceCounters scheduledTransferPeriod=\"PT1M\"><PerformanceCounterConfiguration counterSpecifier=\"\\Processor(_Total)\\% Processor Time\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU utilization\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor(_Total)\\% Privileged Time\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU privileged time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor(_Total)\\% User Time\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"CPU user time\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Processor Information(_Total)\\Processor Frequency\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"CPU frequency\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\System\\Processes\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"Processes\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Process(_Total)\\Thread Count\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"Threads\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Process(_Total)\\Handle Count\" sampleRate=\"PT15S\" unit=\"Count\"><annotation displayName=\"Handles\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\% Committed Bytes In Use\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Memory usage\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\Available Bytes\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory available\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\Committed Bytes\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory committed\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\Memory\\Commit Limit\" sampleRate=\"PT15S\" unit=\"Bytes\"><annotation displayName=\"Memory commit limit\" locale=\"en-us\"/></PerformanceCounterConfiguration><PerformanceCounterConfiguration counterSpecifier=\"\\PhysicalDisk(_Total)\\% Disk Time\" sampleRate=\"PT15S\" unit=\"Percent\"><annotation displayName=\"Disk active time\" locale=\"en-us\"/></PerformanceCounterConfiguration>",
@@ -198,9 +239,9 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[variables('ADVMImagePublisher')]",
-            "offer": "[variables('ADVMImageOffer')]",
-            "sku": "[parameters('ADVMWindowsOSVersion')]",
+            "publisher": "[variables('WindowsImagePublisher')]",
+            "offer": "[variables('WindowsImageOffer')]",
+            "sku": "[variables('WindowsOSVersion')]",
             "version": "latest"
           },
           "osDisk": {
@@ -241,7 +282,7 @@
               "fileUris": [
                 "[concat(parameters('ADInstallscriptUrl'))]"
               ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('VM1scriptFileName'), ' ', variables('VM1scriptParameters'))]"
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('ADInstallScriptFileName'), ' ', variables('ADInstallScriptFileNameParameters'))]"
             }
           }
         },
@@ -263,6 +304,251 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
               "xmlCfg": "[base64(concat(variables('wadcfgxstart'), variables('wadmetricsresourceid'), parameters('ADVMName'), variables('wadcfgxend')))]",
+              "storageAccount": "[variables('diagstorageName')]"
+            },
+            "protectedSettings": {
+              "storageAccountName": "[variables('diagstorageName')]",
+              "storageAccountKey": "[listkeys(variables('diagstorageId'), '2015-05-01-preview').key1]",
+              "storageAccountEndPoint": "https://core.windows.net"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('adipName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "adip"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "apiVersion": "2016-04-30-preview",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('ContosoAzLnxAvailabilitySetName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "ContosoAzLnx1AVSet"
+      },
+      "properties": {
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "2",
+        "managed": "false"
+      }
+    },
+    {
+      "name": "[variables('ContosoAzLnx1NicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "westus",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "ContosoAzLnx1Nic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('ContosoAzLnx1SubnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('ContosoAzLnx1Name')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('vmstorageName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('ContosoAzLnx1NicName'))]"
+      ],
+      "tags": {
+        "displayName": "ContosoAzLnx1"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('ContosoAzLnxAvailabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('ContosoAzLnx1VmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('ContosoAzLnx1Name')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('ContosoAzLnx1ImagePublisher')]",
+            "offer": "[variables('ContosoAzLnx1ImageOffer')]",
+            "sku": "[parameters('ContosoAzLnx1UbuntuOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "ContosoAzLnx1OSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', variables('vmstorageName')), '2016-01-01').primaryEndpoints.blob, variables('ContosoAzLnx1StorageAccountContainerName'), '/', variables('ContosoAzLnx1OSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('ContosoAzLnx1NicName'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2016-04-30-preview",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('WebAvailabilitySetName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "ContosoAzLnx1AVSet"
+      },
+      "properties": {
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "2",
+        "managed": "false"
+      }
+    },
+    {
+      "name": "[variables('WebNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('webipName'))]"
+      ],
+      "tags": {
+        "displayName": "WebNic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[variables('WebSubnetRef')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('adipName'))]"
+              },
+              "privateIPAddress": "10.6.0.4"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('WebVMName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('vmstorageName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('WebNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
+      ],
+      "tags": {
+        "displayName": "ContosoWeb1"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('WebVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('WebVMName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('WindowsImagePublisher')]",
+            "offer": "[variables('WindowsImageOffer')]",
+            "sku": "[variables('WindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "WebOSDisk",
+            "vhd": {
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts', variables('vmstorageName')), '2016-01-01').primaryEndpoints.blob, variables('WebStorageAccountContainerName'), '/', variables('WebOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('WebNicName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "InstallCloudShop",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2016-03-30",
+          "dependsOn": [
+          ],
+          "tags": {
+            "displayName": "InstallCloudShop"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.4",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[concat(parameters('CloudShopInstallscriptUrl'))]"
+              ],
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('CloudShopInstallScriptFileName'), ' ', variables('CloudShopInstallScriptParameters'))]"
+            }
+          }
+        },
+        {
+          "name": "Microsoft.Insights.VMDiagnosticsSettings",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('WebVMName'))]"
+          ],
+          "tags": {
+            "displayName": "AzureDiagnostics"
+          },
+          "properties": {
+            "publisher": "Microsoft.Azure.Diagnostics",
+            "type": "IaaSDiagnostics",
+            "typeHandlerVersion": "1.5",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "xmlCfg": "[base64(concat(variables('wadcfgxstart'), variables('wadmetricsresourceid'), parameters('WebVMName'), variables('wadcfgxend')))]",
               "storageAccount": "[variables('diagstorageName')]"
             },
             "protectedSettings": {

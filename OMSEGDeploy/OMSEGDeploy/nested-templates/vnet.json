@@ -65,7 +65,7 @@
       "name": "[variables('localGatewayName')]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "ContosoOnPremLocalGateway"
+        "displayName": "ContosoAzure2OnPremGW"
       },
       "properties": {
         "localNetworkAddressSpace": {
@@ -110,7 +110,7 @@
         "[concat('Microsoft.Network/virtualNetworks/', variables('VNETNAME'))]"
       ],
       "tags": {
-        "displayName": "ContosoOnPremVPNGateway"
+        "displayName": "ContosoAzure2OnPremGW"
       },
       "properties": {
         "ipConfigurations": [
@@ -142,7 +142,7 @@
       "name": "[variables('gatewayPublicIPName')]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "ContosoOnPremVNETGWIP"
+        "displayName": "ContosoAzureVNETGWIP"
       },
       "properties": {
         "publicIPAllocationMethod": "Dynamic"

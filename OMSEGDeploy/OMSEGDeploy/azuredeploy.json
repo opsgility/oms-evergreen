@@ -75,7 +75,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "DeployActiveDirectory",
+      "name": "DeployVirtualMachines",
       "apiVersion": "2016-02-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/VNET"
@@ -83,7 +83,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/activedirectory.json",
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/virtualmachines.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
