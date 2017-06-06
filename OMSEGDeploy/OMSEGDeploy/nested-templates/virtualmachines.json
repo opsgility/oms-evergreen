@@ -141,7 +141,7 @@
     "ContosoAzLnx1OSDiskName": "ContosoAzLnx1OSDisk",
     "ContosoAzLnx1VmSize": "Standard_DS2_v2",
     "ContosoAzLnx1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
-    "ContosoAzLnx1SubnetRef": "[concat(variables('ContosoAzLnx1VnetID'), '/subnets/', 'ContosoAzureSubnet')]",
+    "ContosoAzLnx1SubnetRef": "[concat(variables('ContosoAzLnx1VnetID'), '/subnets/ContosoAzureSubnet')]",
     "ContosoAzLnx1StorageAccountContainerName": "vhds",
     "ContosoAzLnx1NicName": "[concat(parameters('ContosoAzLnx1Name'), 'NetworkInterface')]",
     "InstallADScriptFolder": "CustomScripts",
