@@ -122,6 +122,7 @@
     "ADVMStorageAccountContainerName": "vhds",
     "ADVMNicName": "[concat(parameters('ADVMName'), 'NetworkInterface')]",
     "WebAvailabilitySetName": "WebAVSet",
+    "LinuxAVSet": "ContosoLnxAVSet",
     "WebOSDiskName": "WebOSDisk",
     "WebVmSize": "Standard_DS1_v2",
     "WebVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
@@ -601,7 +602,7 @@
     {
       "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/availabilitySets",
-      "name": "[variables('WebAvailabilitySetName')]",
+      "name": "[variables('LinuxAVSet')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "ContosoAzLnx1AVSet"
