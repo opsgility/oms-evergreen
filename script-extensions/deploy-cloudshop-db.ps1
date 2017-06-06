@@ -1,6 +1,4 @@
-param($domain, $user, $password)
-# TODO: Update to non-opsgilitytraining storage account 
-$dbsource = "http://opsgilitytraining.blob.core.windows.net/public/AdventureWorks2012.bak"
+param($domain, $user, $password, $dbsource)
 
 $logs = "C:\Logs"
 $data = "C:\Data"
