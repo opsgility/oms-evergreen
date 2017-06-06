@@ -101,7 +101,7 @@
       "name": "VNetWithDNS",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/DeployActiveDirectory"
+        "Microsoft.Resources/deployments/DeployVirtualMachines"
       ],
       "properties": {
         "mode": "Incremental",
