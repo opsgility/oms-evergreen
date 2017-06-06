@@ -143,4 +143,5 @@ while($true)
     Start-Sleep -Seconds 15
 }
 
+cls
 New-AzureRmResourceGroupDeployment -Name "ContosoOnPremHQDeploy" -ResourceGroupName $OnPremHQRG -TemplateFile $OnPremHQRGTemplate -Mode Incremental 

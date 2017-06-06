@@ -226,7 +226,7 @@
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('adipName'))]"
               },
-              "privateIPAddress": "10.5.0.4"
+              "privateIPAddress": "10.5.0.15"
             }
           }
         ]
