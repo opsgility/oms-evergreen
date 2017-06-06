@@ -79,6 +79,7 @@
     },
     "ContosoLnx1Name": {
       "type": "string",
+      "defaultValue": "ContosoLnx1",
       "minLength": 1
     },
     "ContosoLnx1UbuntuOSVersion": {

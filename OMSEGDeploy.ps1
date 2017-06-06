@@ -1,4 +1,5 @@
-cls
+param($vpnSharedKey)
+
 Select-AzureRmSubscription -SubscriptionName "opsgilitytraining"
 
 $AzureHQLocation = "East US"
@@ -113,14 +114,14 @@ New-AzureRmVirtualNetworkGatewayConnection -Name $ContosoOnPremConnection `
                                            -Location $AzureOnPremLocation `
                                            -VirtualNetworkGateway1 $gwOnPremVPN `
                                            -LocalNetworkGateway2 $gwOnPremLocal `
-                                            -ConnectionType IPsec -RoutingWeight 10 -SharedKey 'Abc321'
+                                            -ConnectionType IPsec -RoutingWeight 10 -SharedKey $vpnSharedKey
 
 New-AzureRmVirtualNetworkGatewayConnection -Name $ContosoAzureConnection `
                                            -ResourceGroupName $AzureHQRG `
                                            -Location $AzureHQLocation `
                                            -VirtualNetworkGateway1 $gwAzureVPN `
                                            -LocalNetworkGateway2 $gwAzureLocal `
-                                           -ConnectionType IPsec -RoutingWeight 10 -SharedKey 'Abc321' -Force
+                                           -ConnectionType IPsec -RoutingWeight 10 -SharedKey $vpnSharedKey -Force
 
 Write-Host "Waiting for connectivity before continuing... " 
 
