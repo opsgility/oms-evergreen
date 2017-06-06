@@ -541,21 +541,21 @@
               "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('DomainJoinscriptFileName'), ' ', variables('DomainJoinscriptParameters'))]"
             }
           }
-        },
-        {
-          "name": "[variables('MABSServerVm1-IPName')]",
-          "type": "Microsoft.Network/publicIPAddresses",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2016-03-30",
-          "dependsOn": [],
-          "tags": {
-            "displayName": "MABSServerVm1-IP"
-          },
-          "properties": {
-            "publicIPAllocationMethod": "Dynamic"
-          }
         }
       ]
+    },
+    {
+      "name": "[variables('MABSServerVm1-IPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "MABSServerVm1-IP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
     }
   ],
   "outputs": {}
