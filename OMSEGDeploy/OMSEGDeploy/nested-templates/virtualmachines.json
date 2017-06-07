@@ -132,7 +132,7 @@
     "WebSubnetRef": "[concat(variables('WebVnetID'), '/subnets/ContosoAzureSubnet')]",
     "WebStorageAccountContainerName": "vhds",
     "WebNicName": "[concat(parameters('WebVMName'), 'NetworkInterface')]",
-    "SQLOSDiskName": "SQLOSDisk",
+    "SQLOSDiskName": "SQLOSDisk1",
     "SQLVmSize": "Standard_DS1_v2",
     "SQLVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
     "SQLSubnetRef": "[concat(variables('SQLVnetID'), '/subnets/ContosoAzureSubnet')]",
@@ -383,7 +383,7 @@
     {
       "name": "[variables('ContosoAzLnx1NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "location": "westus",
+      "location": "[resourceGroup().location]",
       "apiVersion": "2016-03-30",
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIPAddresses', variables('linuxipName'))]"
