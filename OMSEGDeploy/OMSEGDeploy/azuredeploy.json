@@ -75,10 +75,33 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "DeployVirtualMachines",
+      "name": "DeployActiveDirectory",
       "apiVersion": "2016-02-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/VNET"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/OMSEGDeploy/OMSEGDeploy/nested-templates/deployad.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUserName": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "DeployVirtualMachines",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VNetWithDNS"
       ],
       "properties": {
         "mode": "Incremental",
@@ -101,7 +124,7 @@
       "name": "VNetWithDNS",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/DeployVirtualMachines"
+        "Microsoft.Resources/deployments/DeployActiveDirectory"
       ],
       "properties": {
         "mode": "Incremental",

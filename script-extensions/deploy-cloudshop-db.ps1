@@ -14,12 +14,16 @@ $script  = "C:\Script"
 $splitpath = $sqlConfigUrl.Split("/")
 $fileName = $splitpath[$splitpath.Length-1]
 $destinationPath = "$script\configure-sql.ps1"
-
+# Download config script
 (New-Object Net.WebClient).DownloadFile($sqlConfigUrl,$destinationPath);
+
+# Get the Adventure works database backup 
+$dbdestination = "C:\SQLDATA\AdventureWorks2012.bak"
+Invoke-WebRequest $dbsource -OutFile $dbdestination
 
 $password =  ConvertTo-SecureString "$password" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential("$env:COMPUTERNAME\$user", $password)
-$command = $file = $PSScriptRoot + "\configure-sql.ps1"
+
 Enable-PSRemoting –force
 Invoke-Command -FilePath $destinationPath -Credential $credential -ComputerName $env:COMPUTERNAME
 Disable-PSRemoting -Force

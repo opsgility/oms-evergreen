@@ -15,9 +15,6 @@ Restart-Service -Name "MSSQLSERVER" -Force
 Invoke-Sqlcmd -ServerInstance Localhost -Database "master" -Query "ALTER LOGIN sa ENABLE" 
 Invoke-Sqlcmd -ServerInstance Localhost -Database "master" -Query "ALTER LOGIN sa WITH PASSWORD = 'Demo@pass1'"
 
-# Get the Adventure works database backup 
-$dbdestination = "C:\SQLDATA\AdventureWorks2012.bak"
-Invoke-WebRequest $dbsource -OutFile $dbdestination 
 
 $mdf = New-Object Microsoft.SqlServer.Management.Smo.RelocateFile("AdventureWorks2012_Data", "C:\Data\AdventureWorks2012.mdf")
 $ldf = New-Object Microsoft.SqlServer.Management.Smo.RelocateFile("AdventureWorks2012_Log", "C:\Logs\AdventureWorks2012.ldf")
