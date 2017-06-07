@@ -139,7 +139,7 @@
     "WebSubnetRef": "[concat(variables('WebVnetID'), '/subnets/ContosoAzureSubnet')]",
     "WebStorageAccountContainerName": "vhds",
     "WebNicName": "[concat(parameters('WebVMName'), 'NetworkInterface')]",
-    "SQLOSDiskName": "SQLOSDisk1",
+    "SQLOSDiskName": "SQLOSDisk2",
     "SQLVmSize": "Standard_DS1_v2",
     "SQLVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'ContosoAzureVNET')]",
     "SQLSubnetRef": "[concat(variables('SQLVnetID'), '/subnets/ContosoAzureSubnet')]",
