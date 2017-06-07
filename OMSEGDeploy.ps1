@@ -1,6 +1,6 @@
-param($vpnSharedKey)
+param($vpnSharedKey, $subscriptionName)
 
-Select-AzureRmSubscription -SubscriptionName "opsgilitytraining"
+Select-AzureRmSubscription -SubscriptionName $subscriptionName
 
 $AzureHQLocation = "East US"
 $AzureOnPremLocation = "West US"
