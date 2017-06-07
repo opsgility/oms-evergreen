@@ -71,7 +71,7 @@
       "metadata": {
         "description": "Zip that contains cloud shop sample"
       },
-      "defaultValue": "\"https://raw.githubusercontent.com/opsgility/oms-evergreen/master/CloudShop/CloudShop.zip"
+      "defaultValue": "https://raw.githubusercontent.com/opsgility/oms-evergreen/master/CloudShop/CloudShop.zip"
     },
     "CloudShopDBDownloadUrl": {
       "type": "string",
@@ -675,8 +675,8 @@
         "storageProfile": {
           "imageReference": {
             "publisher": "[variables('SQLImagePublisher')]",
-            "offer": "[variables('WindowsImageOffer')]",
-            "sku": "[variables('WindowsOSVersion')]",
+            "offer": "[variables('SQLImageOffer')]",
+            "sku": "[variables('SQLSKU')]",
             "version": "latest"
           },
           "osDisk": {
